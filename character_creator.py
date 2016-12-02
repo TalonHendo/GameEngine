@@ -7,6 +7,7 @@
 import tkinter as tk
 import character as ch
 import monster as mon
+import random as rd
 
 TITLE_FONT = ("Helvetica", 18, "bold")
 HEADING1_FONT = ("Helvetica", 14, "bold")
@@ -194,16 +195,160 @@ class FourD6(tk.Frame):
         '''class constructor'''
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.parent = parent
+        
+        self.statBlock = [rd.randint(3,18),
+                          rd.randint(3,18),
+                          rd.randint(3,18),
+                          rd.randint(3,18),
+                          rd.randint(3,18),
+                          rd.randint(3,18)]
+        self.statIndex = 0
+        
         self.create_widgets()
 
     def create_widgets(self):
         '''method for widget placement'''
         
         label = tk.Label(self, text="4 d 6", font=TITLE_FONT)
-        label.grid()
-        button = tk.Button(self, text="Back to Menu",
+        label.grid(column = 1, row = 0)
+        menuButton = tk.Button(self, text="Back to Menu",
                            command=lambda: self.controller.show_frame("Menu"))
-        button.grid()
+        menuButton.grid(column = 1, row = 13)
+        strengthLabel = tk.Label(self, text = "Strength", foreground = "red")
+        strengthLabel.grid(column = 0, row = 2)
+        dexterityLabel = tk.Label(self, text = "Dexterity", foreground = "orange")
+        dexterityLabel.grid(column = 0, row = 3)
+        constitutionLabel = tk.Label(self, text = "Constitution", foreground = "yellow")
+        constitutionLabel.grid(column = 0, row = 4)
+        intelligenceLabel = tk.Label(self, text = "Intelligence", foreground = "green")
+        intelligenceLabel.grid(column = 0, row = 5)
+        wisdomLabel = tk.Label(self, text = "Wisdom", foreground = "blue")
+        wisdomLabel.grid(column = 0, row = 6)
+        charismaLabel = tk.Label(self, text = "Charisma", foreground = "indigo")
+        charismaLabel.grid(column = 0, row = 7)
+        chaLabel = tk.Label(self, text = "CHA", foreground = "indigo")
+        chaLabel.grid(column = 1, row = 7)
+        wisLabel = tk.Label(self, text = "WIS", foreground = "blue")
+        wisLabel.grid(column = 1, row = 6)
+        intLabel = tk.Label(self, text = "INT", foreground = "green")
+        intLabel.grid(row = 5, column = 1)
+        conLabel = tk.Label(self, text = "CON", foreground = "yellow")
+        conLabel.grid(row = 4, column = 1)
+        dexLabel = tk.Label(self, text = "DEX", foreground = "orange")
+        dexLabel.grid(row = 3, column = 1)
+        strLabel = tk.Label(self, text = "STR", foreground = "red")
+        strLabel.grid(row = 2, column = 1)
+        yourScoresLabel = tk.Label(self, text = "Available Scores")
+        yourScoresLabel.grid(column = 1, row = 8)
+        instructionLabel = tk.Label(self, text = "Click a button to pick strength.")
+        instructionLabel.grid(column = 1, row = 9)
+        self.firstScoreButton = tk.Button(self, text = str(self.statBlock[0]),
+                                          command = lambda: self.bttnClick(1, str(self.statBlock[0])))
+        self.firstScoreButton.grid(column = 0, row = 10)
+        self.secondScoreButton = tk.Button(self, text = str(self.statBlock[1]),
+                                           command = lambda: self.bttnClick(2, str(self.statBlock[1])))
+        self.secondScoreButton.grid(column = 1, row = 10)
+        self.thirdScoreButton = tk.Button(self, text = str(self.statBlock[2]),
+                                          command = lambda: self.bttnClick(3, str(self.statBlock[2])))
+        self.thirdScoreButton.grid(column = 2, row = 10)
+        self.fourthScoreButton = tk.Button(self, text = str(self.statBlock[3]),
+                                           command = lambda: self.bttnClick(4, str(self.statBlock[3])))
+        self.fourthScoreButton.grid(column = 0, row = 11)
+        self.fifthScoreButton = tk.Button(self, text = str(self.statBlock[4]),
+                                          command = lambda: self.bttnClick(5, str(self.statBlock[4])))
+        self.fifthScoreButton.grid(column = 1, row = 11)
+        self.sixthScoreButton = tk.Button(self, text = str(self.statBlock[5]),
+                                          command = lambda: self.bttnClick(6, str(self.statBlock[5])))
+        self.sixthScoreButton.grid(column = 2, row = 11)
+        resetButton = tk.Button(self, text = "Reset", command = self.reset)
+        resetButton.grid(column = 1, row = 12)
+        reRollButton = tk.Button(self, text = "Re-Roll", command = self.re_roll)
+        reRollButton.grid(column = 0, row = 13)
+        saveButton = tk.Button(self, text = "Save", command = self.save)
+        saveButton.grid(column = 2, row = 13)
+        self.strValueLabel = tk.Label(self, text = "#", foreground = "red")
+        self.strValueLabel.grid(column = 2, row = 2)
+        self.dexValueLabel = tk.Label(self, text = "#", foreground = "orange")
+        self.dexValueLabel.grid(column = 2, row = 3)
+        self.conValueLabel = tk.Label(self, text = "#", foreground = "yellow")
+        self.conValueLabel.grid(column = 2, row = 4)
+        self.intValueLabel = tk.Label(self, text = "#", foreground = "green")
+        self.intValueLabel.grid(column = 2, row = 5)
+        self.wisValueLabel = tk.Label(self, text = "#", foreground = "blue")
+        self.wisValueLabel.grid(column = 2, row = 6)
+        self.chaValueLabel = tk.Label(self, text = "#", foreground = "indigo")
+        self.chaValueLabel.grid(column = 2, row = 7)
+
+    def re_roll(self):
+        """Re-roll the stat block"""
+        print("rerolling!")
+        self.reset()
+        buttonList= (self.firstScoreButton, self.secondScoreButton, self.thirdScoreButton,
+                     self.fourthScoreButton, self.fifthScoreButton, self.sixthScoreButton)
+        for i in range(len(self.statBlock)):
+            self.statBlock[i] = rd.randint(3,18)
+            buttonList[i].configure(text = str(self.statBlock[i]))
+    def bttnClick(self, value, newText):
+        if self.statIndex == 0:
+            self.strValueLabel.configure(text = newText)
+        elif self.statIndex == 1:
+            self.dexValueLabel.configure(text = newText)
+        elif self.statIndex == 2:
+            self.conValueLabel.configure(text = newText)
+        elif self.statIndex == 3:
+            self.intValueLabel.configure(text = newText)
+        elif self.statIndex == 4:
+            self.wisValueLabel.configure(text = newText)
+        else:
+            self.chaValueLabel.configure(text = newText)
+            
+        if value == 1:
+            self.firstScoreButton["state"] = tk.DISABLED
+        elif value == 2:
+            self.secondScoreButton["state"] = tk.DISABLED
+        elif value == 3:
+            self.thirdScoreButton["state"] = tk.DISABLED
+        elif value == 4:
+            self.fourthScoreButton["state"] = tk.DISABLED
+        elif value == 5:
+            self.fifthScoreButton["state"] = tk.DISABLED
+        elif value == 6:
+            self.sixthScoreButton["state"] = tk.DISABLED
+        self.statIndex += 1
+
+    def reset(self):
+        self.firstScoreButton["state"] = tk.NORMAL
+        self.secondScoreButton["state"] = tk.NORMAL
+        self.thirdScoreButton["state"] = tk.NORMAL
+        self.fourthScoreButton["state"] = tk.NORMAL
+        self.fifthScoreButton["state"] = tk.NORMAL
+        self.sixthScoreButton["state"] = tk.NORMAL
+        self.strValueLabel.configure(text = "#")
+        self.dexValueLabel.configure(text = "#")
+        self.conValueLabel.configure(text = "#")
+        self.intValueLabel.configure(text = "#")
+        self.wisValueLabel.configure(text = "#")
+        self.chaValueLabel.configure(text = "#")
+        self.statIndex = 0
+
+    def save(self):
+        if self.statIndex >= 6:
+            self.controller.player.strength = int(self.strValueLabel.cget("text"))
+            self.controller.player.dexteriy = int(self.dexValueLabel.cget("text"))
+            self.controller.player.constitution = int(self.conValueLabel.cget("text"))
+            self.controller.player.intelligence = int(self.intValueLabel.cget("text"))
+            self.controller.player.wisdom = int(self.wisValueLabel.cget("text"))
+            self.controller.player.charisma = int(self.chaValueLabel.cget("text"))
+            print(self.controller.player)
+        else:
+            print("NOPE!")
+        
+
+        
 
 class Help(tk.Frame):
     '''Displays descriptions of the three character creation methods'''
