@@ -161,13 +161,18 @@ class Hardcore(tk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
+        self.valid = False
+        while self.valid == False:
         
-        self.statBlock = [rd.randint(3,18),
-                          rd.randint(3,18),
-                          rd.randint(3,18),
-                          rd.randint(3,18),
-                          rd.randint(3,18),
-                          rd.randint(3,18)]
+            self.statBlock = [rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18)]
+            for i in self.statBlock:
+                if i >= 12:
+                    self.valid = True
 
         self.create_widgets()
 
@@ -178,12 +183,135 @@ class Hardcore(tk.Frame):
         self.label.grid(row=0, column=0, columnspan=3)
 
 
-        self.label2 = tk.Label(self, text = "none")
-        self.label2.grid()
-     
-        self.button = tk.Button(self, text="Back to Menu",
+        '''method for widget placement'''
+        #row 0 - Heading
+        self.titleLabel = tk.Label(self, text="4 d 6", font=TITLE_FONT)
+        self.titleLabel.grid(row=0, column=0, columnspan=3)
+
+        #row 1 - table headings
+        self.attributeLabel = tk.Label(self, text="Attribute")
+        self.abbreviationLabel = tk.Label(self, text="Abbreviation")
+        self.scoreLabel = tk.Label(self, text="Score")
+        self.attributeLabel.grid(row=1, column=0)
+        self.abbreviationLabel.grid(row=1, column=1)
+        self.scoreLabel.grid(row=1, column=2)
+
+        #row 2 - Strength
+        self.strengthLabel = tk.Label(self, text="Strength", background="red",
+                                    font=TABLE_FONT, width=20)
+        self.strLabel = tk.Label(self, text="(STR)", background="red",
+                               font=TABLE_FONT, width=20)
+        self.strStatLabel = tk.Label(self, text=str(self.statBlock[0]), background="red",
+                                   font=TABLE_FONT, width=20)
+        self.strengthLabel.grid(row = 2, column=0)
+        self.strLabel.grid(row = 2, column=1)
+        self.strStatLabel.grid(row = 2, column=2)
+
+        #row 3 - Dexterity
+        self.dexterityLabel = tk.Label(self, text="Dexterity", background="orange",
+                                    font=TABLE_FONT, width=20)
+        self.dexLabel = tk.Label(self, text="(DEX)", background="orange",
+                               font=TABLE_FONT, width=20)
+        self.dexStatLabel = tk.Label(self, text=str(self.statBlock[1]), background="orange",
+                                   font=TABLE_FONT, width=20)
+        self.dexterityLabel.grid(row = 3, column=0)
+        self.dexLabel.grid(row = 3, column=1)
+        self.dexStatLabel.grid(row = 3, column=2)
+
+        #row 4 - Constitution
+        self.constitutionLabel = tk.Label(self, text="Constitution",
+                                        background="yellow", font=TABLE_FONT,
+                                        width=20)
+        self.conLabel = tk.Label(self, text="(CON)", background="yellow",
+                               font=TABLE_FONT, width=20)
+        self.conStatLabel = tk.Label(self, text=str(self.statBlock[2]), background="yellow",
+                                   font=TABLE_FONT, width=20)
+        self.constitutionLabel.grid(row = 4, column=0)
+        self.conLabel.grid(row = 4, column=1)
+        self.conStatLabel.grid(row = 4, column=2)
+
+        #row 5 - Intelligence
+        self.intelligenceLabel = tk.Label(self, text="Intelligence",
+                                        background="green", font=TABLE_FONT,
+                                        width=20)
+        self.intLabel = tk.Label(self, text="(INT)", background="green",
+                               font=TABLE_FONT, width=20)
+        self.intStatLabel = tk.Label(self, text=str(self.statBlock[3]), background="green",
+                                   font=TABLE_FONT, width=20)
+        self.intelligenceLabel.grid(row = 5, column=0)
+        self.intLabel.grid(row = 5, column=1)
+        self.intStatLabel.grid(row = 5, column=2)
+
+        #row 6 - Wisdom
+        self.wisdomLabel = tk.Label(self, text="Wisdom", background="cyan",
+                                    font=TABLE_FONT, width=20)
+        self.wisLabel = tk.Label(self, text="(WIS)", background="cyan",
+                               font=TABLE_FONT, width=20)
+        self.wisStatLabel = tk.Label(self, text=str(self.statBlock[4]), background="cyan",
+                                   font=TABLE_FONT, width=20)
+        self.wisdomLabel.grid(row = 6, column=0)
+        self.wisLabel.grid(row = 6, column=1)
+        self.wisStatLabel.grid(row = 6, column=2)
+
+        #row 7 - Charisma
+        self.charismaLabel = tk.Label(self, text="Charisma", background="magenta3",
+                                    font=TABLE_FONT, width=20)
+        self.chaLabel = tk.Label(self, text="(CHA)", background="magenta3",
+                               font=TABLE_FONT, width=20)
+        self.chaStatLabel = tk.Label(self, text=str(self.statBlock[5]), background="magenta3",
+                                   font=TABLE_FONT, width=20)
+        self.charismaLabel.grid(row = 7, column=0)
+        self.chaLabel.grid(row = 7, column=1)
+        self.chaStatLabel.grid(row = 7, column=2)
+
+        #row 9 - Instructions
+        self.instructionLbl = tk.Label(self, text="Are you happy with this?",
+                                       font = INSTRUCTION_FONT)
+        self.instructionLbl.grid(row=9, column=0, columnspan=3)
+
+        #row - 10 Extra control buttons
+        self.reRollButton = tk.Button(self, text = "Reroll", width=20,
+                                      command = self.re_roll)
+        self.reRollButton.grid(row = 10, column = 0)
+
+        self.saveButton = tk.Button(self, text="Save and\nContinue", width=20,
+                                    command = self.saveAndContinue)
+        self.saveButton.grid(row=10, column=2)
+        self.menuButton = tk.Button(self, text="Back to Menu",
                            command=lambda: self.controller.show_frame("Menu"))
-        self.button.grid()
+        self.menuButton.grid(row = 10, column = 1)
+
+    def re_roll(self):
+        self.valid = False
+        while self.valid == False:
+        
+            self.statBlock = [rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18),
+                              rd.randint(3,18)]
+            for i in self.statBlock:
+                if i >= 12:
+                    self.valid = True
+        self.strStatLabel.configure(text = str(self.statBlock[0]))
+        self.dexStatLabel.configure(text = str(self.statBlock[1]))
+        self.conStatLabel.configure(text = str(self.statBlock[2]))
+        self.intStatLabel.configure(text = str(self.statBlock[3]))
+        self.wisStatLabel.configure(text = str(self.statBlock[4]))
+        self.chaStatLabel.configure(text = str(self.statBlock[5]))
+
+    def saveAndContinue(self):
+        self.controller.player.strength = int(self.statBlock[0])
+        self.controller.player.dexterity = int(self.statBlock[1])
+        self.controller.player.constitution = int(self.statBlock[2])
+        self.controller.player.intelligence = int(self.statBlock[3])
+        self.controller.player.wisdom = int(self.statBlock[4])
+        self.controller.player.charisma = int(self.statBlock[5])
+        print(self.controller.player)
+        self.controller.show_frame("Menu")
+        
+        
 
 
 
